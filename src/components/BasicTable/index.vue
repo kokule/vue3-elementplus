@@ -1,6 +1,7 @@
 <template>
   <div class="basic-table">
     <el-card shadow="always" class="top-card">
+      <!-- 顶部搜索 -->
       <el-form ref="queryRef" :inline="true" v-show="showSearch">
         <el-form-item
             v-for="formItem in searchFormList"
@@ -19,24 +20,24 @@
                        clearable>
               <el-option
                   v-for="dict in formItem.options || []"
-                  :key="dict.value"
-                  :label="dict.label"
-                  :value="dict.value"
+                  :key="dict[formItem?.optionProps?.key || 'value']"
+                  :label="dict[formItem?.optionProps?.label || 'label']"
+                  :value="dict[formItem?.optionProps?.value || 'value']"
               />
             </el-select>
           </template>
           <template v-else-if="formItem.type === 'treeSelect'">
             <el-tree-select
-                style="width: 200px"
-                collapse-tags
+                clearable
                 filterable
+                collapse-tags
                 collapse-tags-tooltip
                 @change="changeValue($event, formItem.key)"
                 :style="{width : formItem.width || '200px'}"
                 v-model="formItem.value"
                 :multiple="formItem.multiple"
                 :props="formItem.props"
-                node-key="id"
+                :node-key="formItem.nodeKey || 'id'"
                 :show-checkbox="formItem.multiple || true"
                 :data="formItem.options || []"
                 :render-after-expand="false"
@@ -59,6 +60,7 @@
           <template v-else-if="formItem.type === 'buttonInput'">
             <el-input
                 style="width: 200px"
+                clearable
                 v-model="formItem.value"
                 @change="changeValue($event, formItem.key)"
                 :placeholder="formItem.placeholder || '请输入'+ formItem.label">
@@ -98,7 +100,8 @@
               plain
               :icon="btn.icon || 'search'"
               @click="handleSearchBtn(btn)"
-          >{{btn.label}}</el-button>
+          >{{ btn.label }}
+          </el-button>
         </el-col>
         <right-toolbar v-model:showSearch="showSearch" @queryTable="getTableData"></right-toolbar>
       </el-row>
@@ -106,7 +109,7 @@
     <el-card shadow="always" class="bottom-card">
       <el-table
           v-bind="$attrs"
-          v-if="refreshTable"
+          v-if="refreshTable && !options.levelTable"
           :height="tableMaxHeight"
           :max-height="tableMaxHeight"
           v-loading="loading"
@@ -138,6 +141,16 @@
         <!--          </template>-->
         <!--        </el-table-column>-->
       </el-table>
+      <el-table
+          v-bind="$attrs"
+          border
+          v-if="refreshTable && options.levelTable"
+          :height="tableMaxHeight"
+          :max-height="tableMaxHeight"
+          v-loading="loading"
+          :data="tableData">
+        <base-column :table-column="tableColumn"></base-column>
+      </el-table>
     </el-card>
     <pagination
         v-show="options.showPagination"
@@ -151,9 +164,11 @@
 
 <script setup name="BasicTable">
 import _cloneDeep from 'lodash.clonedeep'
+import _ from 'lodash'
+import BaseColumn from './components/BaseColumn.vue'
 
 const {proxy} = getCurrentInstance();
-const emit = defineEmits(['resetQuery', 'handleSearchBtn'])
+const emit = defineEmits(['resetQuery', 'handleSearchBtn', 'changeSearchValue'])
 const searchFormList = defineModel('searchFormList')
 
 const total = ref(0);
@@ -232,10 +247,19 @@ function getTableData() {
   }
 }
 
-
+/**
+ * 一些值变化需要出发请求 获取数据
+ * 业务组件根据具体的key值 判断 具体对应业务
+ * @param value
+ * @param key
+ */
 const changeValue = (value, key) => {
-
+  changeValueFn(value, key)
 }
+
+const changeValueFn = _.debounce((value, key) => {
+  emit('changeSearchValue', {value, key})
+}, 1000)
 
 /** 搜索按钮操作 */
 const handleQuery = () => {
@@ -268,7 +292,7 @@ const handleParams = () => {
  */
 const handleSearchBtn = (btn) => {
   emit('handleSearchBtn', btn)
-  // handleQuery()
+  handleQuery()
 }
 
 

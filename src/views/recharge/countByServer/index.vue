@@ -8,20 +8,16 @@
                @resetQuery="resetQuery"
                @handleSearchBtn="handleSearchBtn"
                v-model:searchFormList="searchFormList">
-    <template #gameName="{row}">
-      <span>{{ row.gameName }}</span>
-    </template>
   </basic-table>
 </template>
 <script setup name="countByServer">
 import dayjs from "dayjs";
-import {terminal} from '@/constant/select.js'
 import basicTable from '@/components/BasicTable'
-import {getGameSelectList} from '@/api/platform/gameManage.js'
+import {getGameSelectList, getGameServerList} from '@/api/platform/gameManage.js'
 import {getCountByServerList} from '@/api/recharge/countByServer.js'
 
 const gameSelectList = ref([])
-const channelSelectList = ref([])
+const serverSelectList = ref([])
 const options = {
   getDataMethod: getCountByServerList,
   getDataParams: {
@@ -46,7 +42,16 @@ const tableColumn = ref([
     label: '游戏区服',
     sortable: true,
     width: 100,
-    fixed: true
+    fixed: true,
+    children: [
+      {
+        prop: 'gameSid',
+        label: '游戏区服',
+        sortable: true,
+        width: 100,
+        fixed: true
+      }
+    ]
   },
   {
     prop: 'spanAmount',
@@ -142,7 +147,6 @@ const searchFormList = ref([
   {
     key: 'gameIds',
     label: '游戏',
-    width: '300px',
     multiple: true,
     type: 'treeSelect',
     value: [],
@@ -153,9 +157,11 @@ const searchFormList = ref([
   {
     key: 'channelTypes',
     label: '游戏服',
-    type: 'selectMultiple',
+    type: 'treeSelect',
     value: [],
-    options: channelSelectList
+    nodeKey: 'id',
+    options: serverSelectList,
+    props: {children: 'childSelect', label: 'name'}
   },
 ])
 const searchBtnList = ref([
@@ -174,10 +180,23 @@ onMounted(() => {
   getSelectList()
 })
 
+
+const gameIds = computed(()=> {
+  const searchForm = searchFormList.value.filter(e=> e.key === 'gameIds')
+  return searchForm.value
+})
+
+watch(()=>gameIds.value, (newValue)=> {
+  console.log(newValue)
+})
+
 const getSelectList = () => {
   getGameSelectList().then(res => {
     gameSelectList.value = res.data
   })
+  // getGameServerList({gameIds : [325]}).then(res=> {
+  //   serverSelectList.value = res.data
+  // })
 }
 /**
  * 重置需要将下拉重新赋值，避免重复请求
@@ -185,7 +204,7 @@ const getSelectList = () => {
 const resetQuery = () => {
   searchFormList.value.forEach(e => {
     if (e.key === 'gameIds') e.options = gameSelectList.value
-    if (e.key === 'channelTypes') e.options = channelSelectList.value
+    if (e.key === 'channelTypes') e.options = serverSelectList.value
   })
 }
 const handleSearchBtn = (btn) => {

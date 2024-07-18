@@ -160,7 +160,12 @@ const searchFormList = ref([
     label: '渠道',
     type: 'selectMultiple',
     value: [],
-    options: channelSelectList
+    options: channelSelectList,
+    optionProps: {
+      key: 'id',
+      value: 'id',
+      label: 'name'
+    }
   },
   {
     key: 'gameIds',
@@ -171,7 +176,7 @@ const searchFormList = ref([
     value: [],
     options: gameSelectList,
     nodeKey: 'id',
-    props: { children: 'childSelect', label: 'name'}
+    props: {children: 'childSelect', label: 'name'}
   }])
 const searchBtnList = ref([
   {
@@ -207,13 +212,9 @@ onMounted(() => {
 
 const getSelectList = () => {
   getChannelSelectList().then(res => {
-    res.data.forEach(e => {
-      e.label = e.name
-      e.value = e.id
-    })
     channelSelectList.value = res.data || []
   })
-  getGameSelectList().then(res=> {
+  getGameSelectList().then(res => {
     gameSelectList.value = res.data
   })
 }
@@ -246,11 +247,11 @@ const handleSearchBtn = (btn) => {
       startTime = dayjs().subtract(1, 'week').startOf('week').format('YYYY-MM-DD')
       endTime = dayjs().subtract(1, 'week').endOf('week').format('YYYY-MM-DD')
       break
-    case 'thisMonth':
+    case 'lastMonth':
       startTime = dayjs().subtract(1, 'month').startOf('month').format('YYYY-MM-DD')
       endTime = dayjs().subtract(1, 'month').endOf('month').format('YYYY-MM-DD')
       break
-    case 'lastMonth':
+    case 'thisMonth':
       startTime = dayjs().startOf('month').format('YYYY-MM-DD')
       endTime = dayjs().endOf('month').format('YYYY-MM-DD')
       break

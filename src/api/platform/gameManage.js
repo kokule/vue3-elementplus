@@ -59,3 +59,16 @@ export function getGameDetail(id) {
         method: 'get',
     })
 }
+
+/**
+ * 获取游戏服务列表
+ * @param data
+ * @returns {*}
+ */
+export function getGameServerList(data) {
+    return request({
+        url: '/game/getServerList',
+        method: 'post',
+        data
+    })
+}

@@ -25,3 +25,16 @@ export function getChannelSelectList(data) {
         data
     })
 }
+/**
+ * 获取渠道子类下拉列表
+ * @param data
+ * @returns {*}
+ */
+export function getChildChannelList(data) {
+    return request({
+        url: '/channel/getChildTypeSelect',
+        method: 'post',
+        data
+    })
+}
+

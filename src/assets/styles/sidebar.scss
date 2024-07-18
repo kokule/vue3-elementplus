@@ -236,3 +236,17 @@
     }
   }
 }
+
+//顶部navbar颜色, 不需要可以注释掉
+
+.navbar-theme-dark {
+  background-color: #304156 !important;
+  .el-breadcrumb__inner a{
+    color: white!important;
+  }
+  .right-menu {
+    .svg-icon {
+      fill: white;
+    }
+  }
+}
