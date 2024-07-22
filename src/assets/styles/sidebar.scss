@@ -237,7 +237,7 @@
   }
 }
 
-//顶部navbar颜色, 不需要可以注释掉
+// 顶部navbar颜色, 不需要可以注释掉
 
 .navbar-theme-dark {
   background-color: #304156 !important;
@@ -249,4 +249,10 @@
       fill: white;
     }
   }
+  .hamburger-container {
+    .hamburger {
+      fill: white;
+    }
+  }
 }
+

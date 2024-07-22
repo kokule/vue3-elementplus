@@ -47,3 +47,14 @@
 .breadcrumb-leave-active {
   position: absolute;
 }
+
+// 鼠标悬浮动画
+.hover-animation {
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.3s ease;
+}
+
+.hover-animation:hover {
+  transform: scale(1.2);
+}

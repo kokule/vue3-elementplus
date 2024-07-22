@@ -16,3 +16,14 @@ export const terminal = [
         label: "小程序",
     },
 ]
+
+export const switchData = [
+    {
+        label: '开',
+        value: 1
+    },
+    {
+        label: '关',
+        value: 0
+    }
+]

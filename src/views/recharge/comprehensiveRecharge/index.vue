@@ -1,7 +1,5 @@
 <template>
-  <basic-table :indent="60"
-               row-key="id"
-               show-summary
+  <basic-table show-summary
                :options="options"
                :tableColumn="tableColumn"
                :searchBtnList="searchBtnList"

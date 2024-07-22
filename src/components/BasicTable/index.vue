@@ -32,7 +32,7 @@
                 filterable
                 collapse-tags
                 collapse-tags-tooltip
-                @change="changeValue($event, formItem.key)"
+                @check="(nodes,keys,halfNodes,halfKeys) => (changeTreeValue(nodes,keys,halfNodes,halfKeys ,formItem.key))"
                 :style="{width : formItem.width || '200px'}"
                 v-model="formItem.value"
                 :multiple="formItem.multiple"
@@ -63,6 +63,7 @@
                 clearable
                 v-model="formItem.value"
                 @change="changeValue($event, formItem.key)"
+                @keyup.enter="handleQuery"
                 :placeholder="formItem.placeholder || '请输入'+ formItem.label">
               <template #append>{{ formItem.buttonLabel }}</template>
             </el-input>
@@ -85,6 +86,7 @@
                       style="width: 200px"
                       @change="changeValue($event, formItem.key)"
                       v-model="formItem.value"
+                      @keyup.enter="handleQuery"
                       :placeholder="formItem.placeholder || '请输入'+ formItem.label"/>
           </template>
         </el-form-item>
@@ -206,7 +208,7 @@ onMounted(() => {
   searchParams.value = _cloneDeep(props.options.getDataParams || {})
   originSearchFormList.value = _cloneDeep(searchFormList.value || [])
   setTableMaxHeight()
-  getTableData();
+  // getTableData();
   window.addEventListener('resize', setTableMaxHeight);
 });
 
@@ -257,8 +259,16 @@ const changeValue = (value, key) => {
   changeValueFn(value, key)
 }
 
+const changeTreeValue = (nodes, keys, halfNodes, halfKeys, key) => {
+  changeTreeValueFn(nodes, keys, halfNodes, halfKeys, key)
+}
+
 const changeValueFn = _.debounce((value, key) => {
   emit('changeSearchValue', {value, key})
+}, 1000)
+
+const changeTreeValueFn = _.debounce((nodes, keys, halfNodes, halfKeys, key) => {
+  emit('changeSearchValue', {value: keys.checkedKeys, key})
 }, 1000)
 
 /** 搜索按钮操作 */
@@ -291,8 +301,10 @@ const handleParams = () => {
  * @param btn
  */
 const handleSearchBtn = (btn) => {
+  // 树表格展开刷新直接执行 ，不需要返回
+  if(btn.type === 'openOrRetract') return toggleExpandAll()
   emit('handleSearchBtn', btn)
-  handleQuery()
+  if(!btn.noSearch) handleQuery()
 }
 
 
@@ -305,7 +317,7 @@ function resetQuery() {
 }
 
 /** 展开/折叠操作 */
-function toggleExpandAll() {
+const toggleExpandAll = ()=> {
   refreshTable.value = false;
   isExpandAll.value = !isExpandAll.value;
   nextTick(() => {

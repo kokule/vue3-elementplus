@@ -291,7 +291,7 @@ const gameIds = computed(() => {
 })
 
 watch(() => gameIds.value, (newValue) => {
-  console.log(newValue)
+  // console.log(newValue)
 })
 
 const getSelectList = () => {
@@ -344,7 +344,6 @@ const changeSearchValue = (data) => {
       channelForm.options = res.data || []
     })
   }
-  console.log(data)
 }
 
 </script>

@@ -26,7 +26,7 @@ defineProps({
   }
 })
 
-const title = '游戏发行管理系统' || import.meta.env.VITE_APP_TITLE;
+const title = '国内游戏发行' || import.meta.env.VITE_APP_TITLE;
 const settingsStore = useSettingsStore();
 const sideTheme = computed(() => settingsStore.sideTheme);
 </script>
@@ -58,7 +58,7 @@ const sideTheme = computed(() => settingsStore.sideTheme);
       width: 32px;
       height: 32px;
       vertical-align: middle;
-      margin-right: 12px;
+      margin-right: 6px;
     }
 
     & .sidebar-title {
@@ -67,7 +67,7 @@ const sideTheme = computed(() => settingsStore.sideTheme);
       color: #fff;
       font-weight: 600;
       line-height: 50px;
-      font-size: 14px;
+      font-size: 18px;
       font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
       vertical-align: middle;
     }

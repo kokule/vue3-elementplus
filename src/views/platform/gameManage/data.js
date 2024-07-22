@@ -3,10 +3,12 @@ import {
     gameTypeList,
     gameThemeList,
     dropTypeList,
+    switchOption,
     rechargeOpenList,
-    gameOpenList
+    gameOpenList, gameOperateList
 } from './dictionary.js'
 
+import {switchData} from '@/constant/select.js'
 /*
 初始的form 空值
  */
@@ -231,7 +233,8 @@ export const formArray = [
     {
         key: 'step',
         label: '游戏运营阶段',
-        type: 'radio'
+        type: 'radio',
+        options: gameOperateList
     },
     {
         key: 'whiteListUsername',
@@ -254,7 +257,8 @@ export const formArray = [
     {
         key: 'noServerMap',
         label: '取消服务器映射',
-        type: 'radio'
+        type: 'radio',
+        options: switchOption
     },
     {
         key: 'noCallbackExpression',
@@ -302,5 +306,54 @@ export const formArray = [
 ]
 
 
-export const drawerFormArr = []
+export const sdkFormArr = [
+    {
+        key: 'version',
+        type: 'select',
+        width: '40%',
+        col: 24,
+        options: gamePlatformList,
+        label: '版本',
+    },
+    {
+        key: 'extendConfig',
+        type: 'radio',
+        col: 8,
+        options: switchData,
+        label: '继承父游戏配置',
+        tooltip: '是否处于提审中状态'
+    },
+    {
+        key: 'extendConfig',
+        type: 'radio',
+        col: 8,
+        options: switchData,
+        label: '提审中',
+        tooltip: '是否处于提审中状态'
+    },
+    {
+        key: 'extendConfig',
+        type: 'radio',
+        col: 8,
+        options: switchData,
+        label: '是否显示登录框',
+        tooltip: '是否处于提审中状态'
+    },
+    {
+        key: 'extendConfig',
+        type: 'radio',
+        col: 8,
+        options: switchData,
+        label: '第三方渠道登录切换',
+        tooltip: '是否处于提审中状态'
+    },
+    {
+        key: 'extendConfig',
+        type: 'radio',
+        col: 8,
+        options: switchData,
+        label: '微信|qq一键登录开关',
+        tooltip: '是否处于提审中状态'
+    },
+]
 

@@ -1,55 +1,65 @@
 <template>
   <div class="navbar" :class="`navbar-${sideTheme}`">
-    <hamburger id="hamburger-container" :is-active="appStore.sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" v-if="!settingsStore.topNav" />
-    <top-nav id="topmenu-container" class="topmenu-container" v-if="settingsStore.topNav" />
+    <hamburger id="hamburger-container" :is-active="appStore.sidebar.opened" class="hamburger-container"
+               @toggleClick="toggleSideBar"/>
+    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" v-if="!settingsStore.topNav"/>
+    <top-nav id="topmenu-container" class="topmenu-container" v-if="settingsStore.topNav"/>
 
     <div class="right-menu">
       <template v-if="appStore.device !== 'mobile'">
-        <header-search id="header-search" class="right-menu-item" />
 
-<!--        <el-tooltip content="源码地址" effect="dark" placement="bottom">-->
-<!--          <ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />-->
-<!--        </el-tooltip>-->
 
-<!--        <el-tooltip content="文档地址" effect="dark" placement="bottom">-->
-<!--          <ruo-yi-doc id="ruoyi-doc" class="right-menu-item hover-effect" />-->
-<!--        </el-tooltip>-->
+        <!--        <header-search id="header-search" class="right-menu-item" />-->
 
-        <screenfull id="screenfull" class="right-menu-item hover-effect" />
+        <el-tooltip content="回到首页" effect="dark" placement="bottom">
+          <svg-icon class="svg-icon-home hover-effect hover-animation" icon-class="home"/>
+        </el-tooltip>
+
+        <!--        <el-tooltip content="文档地址" effect="dark" placement="bottom">-->
+        <!--          <ruo-yi-doc id="ruoyi-doc" class="right-menu-item hover-effect" />-->
+        <!--        </el-tooltip>-->
+
 
         <el-tooltip content="布局大小" effect="dark" placement="bottom">
-          <size-select id="size-select" class="right-menu-item hover-effect" />
+          <size-select id="size-select" class="right-menu-item hover-effect"/>
+        </el-tooltip>
+        <el-tooltip content="布局设置" effect="dark" placement="bottom">
+          <svg-icon class="svg-icon-layout hover-animation" icon-class="layout"  @click="setLayout"/>
+        </el-tooltip>
+        <screenfull id="screenfull" class="right-menu-item hover-effect"/>
+        <el-tooltip content="退出登录" effect="dark" placement="bottom">
+          <svg-icon class="svg-icon-exit hover-effect hover-animation" icon-class="exit"/>
         </el-tooltip>
       </template>
-      <div class="avatar-container">
-        <el-dropdown @command="handleCommand" class="right-menu-item hover-effect" trigger="click">
-          <div class="avatar-wrapper">
-<!--            <img :src="userStore.avatar" class="user-avatar" />-->
-<!--            <el-icon><Avatar/></el-icon>-->
-            <el-icon><caret-bottom /></el-icon>
-          </div>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <router-link to="/user/profile">
-                <el-dropdown-item>个人中心</el-dropdown-item>
-              </router-link>
-              <el-dropdown-item command="setLayout" v-if="settingsStore.showSettings">
-                <span>布局设置</span>
-              </el-dropdown-item>
-              <el-dropdown-item divided command="logout">
-                <span>退出登录</span>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </div>
+
+      <!--      <div class="avatar-container">-->
+      <!--        <el-dropdown @command="handleCommand" class="right-menu-item hover-effect" trigger="click">-->
+      <!--          <div class="avatar-wrapper">-->
+      <!--&lt;!&ndash;            <img :src="userStore.avatar" class="user-avatar" />&ndash;&gt;-->
+      <!--&lt;!&ndash;            <el-icon><Avatar/></el-icon>&ndash;&gt;-->
+      <!--            <el-icon><caret-bottom /></el-icon>-->
+      <!--          </div>-->
+      <!--          <template #dropdown>-->
+      <!--            <el-dropdown-menu>-->
+      <!--              <router-link to="/user/profile">-->
+      <!--                <el-dropdown-item>个人中心</el-dropdown-item>-->
+      <!--              </router-link>-->
+      <!--              <el-dropdown-item command="setLayout" v-if="settingsStore.showSettings">-->
+      <!--                <span>布局设置</span>-->
+      <!--              </el-dropdown-item>-->
+      <!--              <el-dropdown-item divided command="logout">-->
+      <!--                <span>退出登录</span>-->
+      <!--              </el-dropdown-item>-->
+      <!--            </el-dropdown-menu>-->
+      <!--          </template>-->
+      <!--        </el-dropdown>-->
+      <!--      </div>-->
     </div>
   </div>
 </template>
 
 <script setup>
-import { ElMessageBox } from 'element-plus'
+import {ElMessageBox} from 'element-plus'
 import Breadcrumb from '@/components/Breadcrumb'
 import TopNav from '@/components/TopNav'
 import Hamburger from '@/components/Hamburger'
@@ -94,10 +104,12 @@ function logout() {
     userStore.logOut().then(() => {
       location.href = '/index';
     })
-  }).catch(() => { });
+  }).catch(() => {
+  });
 }
 
 const emits = defineEmits(['setLayout'])
+
 function setLayout() {
   emits('setLayout');
 }
@@ -143,6 +155,7 @@ function setLayout() {
     height: 100%;
     line-height: 50px;
     display: flex;
+    margin-right: 20px;
 
     &:focus {
       outline: none;
@@ -189,6 +202,19 @@ function setLayout() {
         }
       }
     }
+    .svg-icon-home {
+      font-size: 28px;
+      margin: 8px 10px 0 10px;
+    }
+    .svg-icon-exit {
+      font-size: 26px;
+      margin: 10px 10px 0 10px;
+    }
+    .svg-icon-layout {
+      font-size: 22px;
+      margin: 12px 12px 0 10px;
+    }
   }
 }
+
 </style>

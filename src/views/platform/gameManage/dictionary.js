@@ -163,6 +163,19 @@ export const rechargeOpenList = [
     }
 ]
 
+// 开关
+export const switchOption = [
+    {
+        value: 1,
+        label: '开'
+    },
+    {
+        value: 0,
+        label: '关'
+    }
+]
+
+
 // 游戏开启状态
 export const gameOpenList = [
     {
@@ -180,5 +193,25 @@ export const gameOpenList = [
     {
         value: "0",
         label: "关闭",
+    },
+]
+
+// 游戏运营阶段
+export const gameOperateList = [
+    {
+        value: "hot",
+        label: "火爆",
+    },
+    {
+        value: "beta",
+        label: "测试",
+    },
+    {
+        value: "new",
+        label: "最新",
+    },
+    {
+        value: "normal",
+        label: "普通",
     },
 ]

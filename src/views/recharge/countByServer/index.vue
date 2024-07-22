@@ -7,6 +7,7 @@
                :searchBtnList="searchBtnList"
                @resetQuery="resetQuery"
                @handleSearchBtn="handleSearchBtn"
+               @changeSearchValue="changeSearchValue"
                v-model:searchFormList="searchFormList">
   </basic-table>
 </template>
@@ -138,7 +139,7 @@ const searchFormList = ref([
     format: 'YYYY-MM-DD'
   },
   {
-    key: ['startTime', 'endTime'],
+    key: ['serverStartTime', 'serverEndTime'],
     label: '开服日期',
     type: 'dateRange',
     value: [options.getDataParams.startTime, options.getDataParams.endTime],
@@ -155,13 +156,15 @@ const searchFormList = ref([
     props: {children: 'childSelect', label: 'name'}
   },
   {
-    key: 'channelTypes',
+    key: 'gameServerIds',
     label: '游戏服',
     type: 'treeSelect',
+    multiple: true,
     value: [],
     nodeKey: 'id',
     options: serverSelectList,
     props: {children: 'childSelect', label: 'name'}
+    // optionProps: {key: 'id', value: 'id', label: 'name'}
   },
 ])
 const searchBtnList = ref([
@@ -194,9 +197,6 @@ const getSelectList = () => {
   getGameSelectList().then(res => {
     gameSelectList.value = res.data
   })
-  // getGameServerList({gameIds : [325]}).then(res=> {
-  //   serverSelectList.value = res.data
-  // })
 }
 /**
  * 重置需要将下拉重新赋值，避免重复请求
@@ -224,6 +224,19 @@ const handleSearchBtn = (btn) => {
   searchFormList.value[1].value = [startTime, endTime]
 }
 
+/**
+ * 获取关联的下拉数据
+ */
+const changeSearchValue = (data) => {
+  const {key, value} = data
+  // 获取渠道
+  if(key === 'gameIds') {
+    getGameServerList(value).then(res=> {
+      const gameServerForm = searchFormList.value.find(e=> e.key === 'gameServerIds')
+      gameServerForm.options = res.data
+    })
+  }
+}
 </script>
 <style scoped lang="scss">
 
