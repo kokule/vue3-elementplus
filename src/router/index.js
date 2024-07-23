@@ -40,12 +40,17 @@ export const constantRoutes = [
   },
   {
     path: '/login',
-    component: () => import('@/views/login'),
+    component: () => import('@/views/login/login.vue'),
     hidden: true
   },
   {
     path: '/register',
-    component: () => import('@/views/register'),
+    component: () => import('@/views/login/register.vue'),
+    hidden: true
+  },
+  {
+    path: '/home',
+    component: () => import('@/views/home/index.vue'),
     hidden: true
   },
   {
@@ -60,17 +65,21 @@ export const constantRoutes = [
   },
   {
     path: '',
-    component: Layout,
-    redirect: '/platform/game-manage',
-    children: [
-      {
-        path: '/game-manage',
-        component: () => import('@/views/platform/gameManage/index.vue'),
-        name: 'gameManage1',
-        meta: { title: '游戏管理', activeMenu: '/platform/game', icon: 'star' }
-      }
-    ]
+    redirect: '/login'
   }
+  // {
+  //   path: '',
+  //   component: Layout,
+  //   redirect: '/platform/game-manage',
+  //   children: [
+  //     {
+  //       path: '/game-manage',
+  //       component: () => import('@/views/platform/gameManage/index2.vue'),
+  //       name: 'gameManage1',
+  //       meta: { title: '游戏管理', activeMenu: '/platform/game', icon: 'star' }
+  //     }
+  //   ]
+  // }
 ]
 
 // 动态路由，基于用户权限动态去加载

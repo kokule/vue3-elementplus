@@ -12,7 +12,7 @@
         <!--        <header-search id="header-search" class="right-menu-item" />-->
 
         <el-tooltip content="回到首页" effect="dark" placement="bottom">
-          <svg-icon class="svg-icon-home hover-effect hover-animation" icon-class="home"/>
+          <svg-icon class="svg-icon-home hover-effect hover-animation" icon-class="home" @click="toHomePage"/>
         </el-tooltip>
 
         <!--        <el-tooltip content="文档地址" effect="dark" placement="bottom">-->
@@ -28,7 +28,7 @@
         </el-tooltip>
         <screenfull id="screenfull" class="right-menu-item hover-effect"/>
         <el-tooltip content="退出登录" effect="dark" placement="bottom">
-          <svg-icon class="svg-icon-exit hover-effect hover-animation" icon-class="exit"/>
+          <svg-icon class="svg-icon-exit hover-effect hover-animation" icon-class="exit" @click="logout"/>
         </el-tooltip>
       </template>
 
@@ -72,6 +72,7 @@ import useAppStore from '@/store/modules/app'
 import useUserStore from '@/store/modules/user'
 import useSettingsStore from '@/store/modules/settings'
 
+const router = useRouter();
 const appStore = useAppStore()
 const userStore = useUserStore()
 const settingsStore = useSettingsStore()
@@ -101,9 +102,10 @@ function logout() {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(() => {
-    userStore.logOut().then(() => {
-      location.href = '/index';
-    })
+    // userStore.logOut().then(() => {
+    //   location.href = '/index';
+    // })
+    router.push({ path: '/login', query: {} });
   }).catch(() => {
   });
 }
@@ -112,6 +114,10 @@ const emits = defineEmits(['setLayout'])
 
 function setLayout() {
   emits('setLayout');
+}
+
+const toHomePage = () => {
+  router.push({ path: '/home', query: {} });
 }
 </script>
 

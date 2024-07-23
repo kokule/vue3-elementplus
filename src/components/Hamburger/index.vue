@@ -21,7 +21,7 @@ defineProps({
   }
 })
 
-const emit = defineEmits()
+const emit = defineEmits(['toggleClick'])
 const toggleClick = () => {
   emit('toggleClick');
 }

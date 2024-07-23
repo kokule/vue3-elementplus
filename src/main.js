@@ -4,6 +4,7 @@ import Cookies from 'js-cookie'
 
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import 'animate.css/animate.min.css'
 import locale from 'element-plus/es/locale/lang/zh-cn'
 
 import '@/assets/styles/index.scss' // global css
@@ -41,8 +42,6 @@ import ImageUpload from "@/components/ImageUpload"
 import ImagePreview from "@/components/ImagePreview"
 // 自定义树选择组件
 import TreeSelect from '@/components/TreeSelect'
-// 字典标签组件
-import DictTag from '@/components/DictTag'
 
 const app = createApp(App)
 
@@ -57,7 +56,6 @@ app.config.globalProperties.selectDictLabel = selectDictLabel
 app.config.globalProperties.selectDictLabels = selectDictLabels
 
 // 全局组件挂载
-app.component('DictTag', DictTag)
 app.component('Pagination', Pagination)
 app.component('TreeSelect', TreeSelect)
 app.component('FileUpload', FileUpload)
