@@ -105,7 +105,11 @@
           >{{ btn.label }}
           </el-button>
         </el-col>
-        <right-toolbar v-model:showSearch="showSearch" @queryTable="getTableData"></right-toolbar>
+        <right-toolbar v-model:showSearch="showSearch"
+                       @queryTable="getTableData"
+                       @setColumnVisible="setTableColumn"
+                       v-model:columns="selectColumns">
+        </right-toolbar>
       </el-row>
     </el-card>
     <el-card shadow="always" class="bottom-card">
@@ -116,24 +120,27 @@
           :max-height="tableMaxHeight"
           v-loading="loading"
           :data="tableData">
-        <el-table-column
-            v-for="column in tableColumn"
-            :key="column.prop"
-            :sortable="column.sortable"
-            :prop="column.prop"
-            :align="column.align"
-            :fixed="column.fixed"
-            :label="column.label"
-            :show-overflow-tooltip="column.showTooltip"
-            :width="column.width">
-          <template v-if="column.useSlot" #default="scope">
-            <!-- 当前插槽名就是当前的prop, 内容可以自定义， 用于一些复杂的显示-->
-            <slot :name="column.prop" :row="scope.row"></slot>
-          </template>
-          <template v-else #default="scope">
-            <span>{{ scope.row[column.prop] }}</span>
-          </template>
-        </el-table-column>
+        <template #default>
+          <el-table-column
+              v-for="column in columns"
+              :key="column.prop"
+              :sortable="column.sortable"
+              :prop="column.prop"
+              :align="column.align"
+              :fixed="column.fixed"
+              :label="column.label"
+              :show-overflow-tooltip="column.showTooltip"
+              :width="column.width">
+            <template v-if="column.useSlot" #default="scope">
+              <!-- 当前插槽名就是当前的prop, 内容可以自定义， 用于一些复杂的显示-->
+              <slot :name="column.prop" :row="scope.row"></slot>
+            </template>
+            <template v-else #default="scope">
+              <span>{{ scope.row[column.prop] }}</span>
+            </template>
+          </el-table-column>
+        </template>
+
         <!--        <el-table-column label="操作" align="center" width="360" class-name="small-padding fixed-width">-->
         <!--          <template #default="scope">-->
         <!--            <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)">编辑</el-button>-->
@@ -170,19 +177,20 @@ import _ from 'lodash'
 import BaseColumn from './components/BaseColumn.vue'
 
 const {proxy} = getCurrentInstance();
-const emit = defineEmits(['resetQuery', 'handleSearchBtn', 'changeSearchValue'])
-const searchFormList = defineModel('searchFormList')
-
+const searchFormList = defineModel('searchFormList');
+const emit = defineEmits(['resetQuery', 'handleSearchBtn', 'changeSearchValue']);
 const total = ref(0);
+const title = ref("");
+const columns = ref([]) // 实际使用的列表
+const selectColumns = ref([]) // 下拉选择的列表， 用来做显隐
 const tableData = ref([]);
 const loading = ref(false);
+const searchParams = ref({});
 const showSearch = ref(true);
-const title = ref("");
 const isExpandAll = ref(false);
 const refreshTable = ref(true);
 const tableMaxHeight = ref('500');
 const originSearchFormList = ref({}) // 保留一份初始的数据 用于重置
-const searchParams = ref({})
 
 /**
  * options 包括
@@ -208,6 +216,8 @@ onMounted(() => {
   searchParams.value = _cloneDeep(props.options.getDataParams || {})
   originSearchFormList.value = _cloneDeep(searchFormList.value || [])
   setTableMaxHeight()
+
+  setTableColumn('mounted')
   // getTableData();
   window.addEventListener('resize', setTableMaxHeight);
 });
@@ -217,6 +227,24 @@ onMounted(() => {
  */
 const setTableMaxHeight = () => {
   tableMaxHeight.value = (window.innerHeight / 1.7) + (!props.options.showPagination ? window.innerHeight / 10 : 0) + 'px'
+}
+
+const setTableColumn = (type) => {
+  if(type === 'mounted') { // 初始化的时候设置
+    selectColumns.value = _cloneDeep(props.tableColumn)
+    selectColumns.value.forEach(e => {
+      // 默认没有visible字段的情况下,给一个默认值 true
+      if (!e.hasOwnProperty('visible')) {
+        e.visible = true
+      }
+    })
+  }
+  const showProps = selectColumns.value.reduce((pre, cur)=> {
+    if(cur.visible) pre.push(cur.prop)
+    return pre
+  }, [])
+  columns.value = selectColumns.value.filter(e=> showProps.includes(e.prop))
+  toggleExpandAll()
 }
 
 
@@ -302,9 +330,9 @@ const handleParams = () => {
  */
 const handleSearchBtn = (btn) => {
   // 树表格展开刷新直接执行 ，不需要返回
-  if(btn.type === 'openOrRetract') return toggleExpandAll()
+  if (btn.type === 'openOrRetract') return toggleExpandAll()
   emit('handleSearchBtn', btn)
-  if(!btn.noSearch) handleQuery()
+  if (!btn.noSearch) handleQuery()
 }
 
 
@@ -317,7 +345,7 @@ function resetQuery() {
 }
 
 /** 展开/折叠操作 */
-const toggleExpandAll = ()=> {
+const toggleExpandAll = () => {
   refreshTable.value = false;
   isExpandAll.value = !isExpandAll.value;
   nextTick(() => {

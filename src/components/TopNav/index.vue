@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import { constantRoutes } from "@/router"
+import {constantRoutes, dynamicRoutes} from "@/router"
 import { isHttp } from '@/utils/validate'
 import useAppStore from '@/store/modules/app'
 import useSettingsStore from '@/store/modules/settings'
@@ -174,14 +174,16 @@ onMounted(() => {
   float: left;
   height: 50px !important;
   line-height: 50px !important;
-  color: #999093 !important;
+  color: #ffffff;
   padding: 0 5px !important;
   margin: 0 10px !important;
+  font-size: 15px;
+  font-weight: bold;
 }
 
 .topmenu-container.el-menu--horizontal > .el-menu-item.is-active, .el-menu--horizontal > .el-sub-menu.is-active .el-submenu__title {
-  border-bottom: 2px solid #{'var(--theme)'} !important;
-  color: #303133;
+  border-bottom: 5px solid #{'var(--theme)'} !important;
+  color: #409EFF;
 }
 
 /* sub-menu item */
@@ -196,7 +198,8 @@ onMounted(() => {
 
 /* 背景色隐藏 */
 .topmenu-container.el-menu--horizontal>.el-menu-item:not(.is-disabled):focus, .topmenu-container.el-menu--horizontal>.el-menu-item:not(.is-disabled):hover, .topmenu-container.el-menu--horizontal>.el-submenu .el-submenu__title:hover {
-  background-color: #ffffff !important;
+  color: #409EFF!important;
+  background-color: rgba(0, 0, 0, 0.2)  !important;
 }
 
 /* 图标右间距 */

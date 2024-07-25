@@ -5,4 +5,5 @@ for (const path in modules) {
   icons.push(p);
 }
 
+
 export default icons

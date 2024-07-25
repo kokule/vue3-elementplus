@@ -67,7 +67,7 @@ defineExpose({
       margin-bottom: 5px;
     }
     .icon-list {
-      height: 200px;
+      height: 100%;
       overflow: auto;
       .list-container {
         display: flex;

@@ -2,7 +2,7 @@
 import { ElLoading, ElMessage } from 'element-plus'
 import { saveAs } from 'file-saver'
 import { getToken } from '@/utils/auth'
-import errorCode from '@/utils/errorCode'
+import errorCode from '@/constant/errorCode.js'
 import { blobValidate } from '@/utils/ruoyi'
 
 const baseURL = import.meta.env.VITE_APP_BASE_API

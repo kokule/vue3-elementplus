@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <Hamburger></Hamburger>
     <div class="home-top-nav">
       <el-tooltip content="退出登录" effect="dark" placement="bottom">
         <svg-icon class="svg-icon-exit hover-effect hover-animation" icon-class="exit" @click="logout"/>
@@ -16,7 +15,7 @@
     <div class="system-box">
       <div v-for="item in systemList"
            :key="item.title"
-           @click="toSystem"
+           @click="toSystem(item.title)"
            :class="item.animateClass"
            class="system-box-item hover-animation animate__animated">
         <svg-icon :icon-class="item.svg"></svg-icon>
@@ -26,9 +25,10 @@
   </div>
 </template>
 <script setup>
-// import Hamburger from '@/components/Hamburger/index.vue'
 import {useRouter} from "vue-router";
 import SvgIcon from "@/components/SvgIcon/index.vue";
+import {authMenuRoute, countMenuRoute, cpMenuRoute, investMenuRoute, operateMenuRoute} from "@/router/index.js";
+import usePermissionStore from "@/store/modules/permission.js";
 
 const router = useRouter()
 const systemList = [
@@ -59,12 +59,32 @@ const systemList = [
   }
 ]
 
-const toSystem = () => {
-  router.push({ path: '/platform/game-manage', query: {} });
+const toSystem = (title) => {
+  let routes = []
+  switch (title) {
+    case '投放系统':
+      routes = investMenuRoute
+      break
+    case '运营系统':
+      routes = operateMenuRoute
+      break
+    case '统计系统':
+      routes = countMenuRoute
+      break
+    case '权限系统':
+      routes = authMenuRoute
+      break
+    case 'CP系统':
+      routes = cpMenuRoute
+      break
+  }
+  sessionStorage.setItem('systemName', title)
+  usePermissionStore().setSidebarRouters(authMenuRoute)
+  router.push({path: routes[0].path + '/' + routes[0].children[0].path});
 }
 
 const logout = () => {
-  router.push({ path: '/login', query: {} });
+  router.push({path: '/login', query: {}});
 }
 </script>
 <style scoped lang="scss">
@@ -80,20 +100,24 @@ const logout = () => {
     height: 50px;
     padding-right: 30px;
     flex-direction: row-reverse;
+
     .user {
       color: white;
       margin: 0 15px;
       padding-top: 15px;
     }
+
     .user-img {
       width: 30px;
       height: 30px;
       padding-top: 12px;
+
       img {
         width: 100%;
         border-radius: 50px;
       }
     }
+
     .svg-icon-exit {
       font-size: 26px;
       margin-top: 14px;
@@ -120,6 +144,7 @@ const logout = () => {
 
     width: 100%;
     height: 100%;
+
     .svg-icon {
       font-size: 100px;
       z-index: 10;
@@ -178,7 +203,8 @@ const logout = () => {
     text-shadow: #79808d 3px 3px 3px;
   }
 }
-.animate__animated.animate__bounceInRight,.animate__bounceInDown,.animate__bounceInLeft, .animate__backInDown {
+
+.animate__animated.animate__bounceInRight, .animate__bounceInDown, .animate__bounceInLeft, .animate__backInDown {
   --animate-duration: 2s;
 }
 </style>

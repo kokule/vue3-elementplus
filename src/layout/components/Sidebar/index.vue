@@ -37,8 +37,8 @@ const appStore = useAppStore()
 const settingsStore = useSettingsStore()
 const permissionStore = usePermissionStore()
 
-// const sidebarRouters =  computed(() => permissionStore.sidebarRouters);
-const sidebarRouters =  dynamicRoutes
+const sidebarRouters =  computed(() => permissionStore.sidebarRouters);
+// const sidebarRouters =  dynamicRoutes
 const showLogo = computed(() => settingsStore.sidebarLogo);
 const sideTheme = computed(() => settingsStore.sideTheme);
 const theme = computed(() => settingsStore.theme);

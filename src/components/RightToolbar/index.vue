@@ -8,14 +8,20 @@
         <el-button circle icon="Refresh" @click="refresh()" />
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="显隐列" placement="top" v-if="columns">
-        <el-button circle icon="Menu" @click="showColumn()" v-if="showColumnsType == 'transfer'"/>
-        <el-dropdown trigger="click" :hide-on-click="false" style="padding-left: 12px" v-if="showColumnsType == 'checkbox'">
+        <el-button circle icon="Menu" @click="showColumn()" v-if="showColumnsType === 'transfer'"/>
+        <el-dropdown trigger="click"
+                     teleported
+                     placement="bottom-start"
+                     :hide-on-click="false"
+                     style="padding-left: 12px"
+                     v-if="showColumnsType === 'checkbox'">
           <el-button circle icon="Menu" />
           <template #dropdown>
             <el-dropdown-menu>
-              <template v-for="item in columns" :key="item.key">
+              <el-checkbox class="check-all" :indeterminate="allIndeterminate" :checked="!allIndeterminate" @change="checkboxChange($event, {prop: 'all'})" label="全选" />
+              <template v-for="item in columns" :key="item.prop">
                 <el-dropdown-item>
-                  <el-checkbox :checked="item.visible" @change="checkboxChange($event, item.label)" :label="item.label" />
+                  <el-checkbox v-model="item.visible" @change="checkboxChange($event, item)" :label="item.label" />
                 </el-dropdown-item>
               </template>
             </el-dropdown-menu>
@@ -35,16 +41,18 @@
 </template>
 
 <script setup>
+const columns = defineModel('columns');
+
 const props = defineProps({
   /* 是否显示检索条件 */
   showSearch: {
     type: Boolean,
     default: true,
   },
-  /* 显隐列信息 */
-  columns: {
-    type: Array,
-  },
+  // /* 显隐列信息 */
+  // columns: {
+  //   type: Array,
+  // },
   /* 是否显示检索图标 */
   search: {
     type: Boolean,
@@ -62,7 +70,7 @@ const props = defineProps({
   },
 })
 
-const emits = defineEmits(['update:showSearch', 'queryTable']);
+const emits = defineEmits(['update:showSearch', 'queryTable', 'setColumnVisible']);
 
 // 显隐数据
 const value = ref([]);
@@ -70,6 +78,7 @@ const value = ref([]);
 const title = ref("显示/隐藏");
 // 是否显示弹出层
 const open = ref(false);
+const allCheck = ref(true);
 
 const style = computed(() => {
   const ret = {};
@@ -78,6 +87,10 @@ const style = computed(() => {
   }
   return ret;
 });
+
+const allIndeterminate = computed(()=> {
+  return columns.value.some(e=> !e.visible)
+})
 
 // 搜索
 function toggleSearch() {
@@ -102,7 +115,7 @@ function showColumn() {
   open.value = true;
 }
 
-if (props.showColumnsType == 'transfer') {
+if (props.showColumnsType === 'transfer') {
   // 显隐列初始默认隐藏列
   for (let item in props.columns) {
     if (props.columns[item].visible === false) {
@@ -112,8 +125,15 @@ if (props.showColumnsType == 'transfer') {
 }
 
 // 勾选
-function checkboxChange(event, label) {
-  props.columns.filter(item => item.label == label)[0].visible = event;
+function checkboxChange(visible, item) {
+  item.visible = visible
+  if(item.prop === 'all') {
+    console.log(visible)
+    columns.value.forEach(e=> e.visible = visible)
+    console.log(columns.value)
+  }
+  emits('setColumnVisible')
+  // props.columns.filter(item => item.label === label)[0].visible = event;
 }
 
 </script>
@@ -122,7 +142,7 @@ function checkboxChange(event, label) {
 :deep(.el-transfer__button) {
   border-radius: 50%;
   display: block;
-  margin-left: 0px;
+  margin-left: 0;
 }
 :deep(.el-transfer__button:first-child) {
   margin-bottom: 10px;
@@ -130,5 +150,8 @@ function checkboxChange(event, label) {
 :deep(.el-dropdown-menu__item) {
   line-height: 30px;
   padding: 0 17px;
+}
+.check-all {
+  padding-left: 17px;
 }
 </style>

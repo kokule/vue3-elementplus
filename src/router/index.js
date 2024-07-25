@@ -1,7 +1,11 @@
-import { createWebHistory, createRouter } from 'vue-router'
+import {createWebHistory, createRouter} from 'vue-router'
 /* Layout */
 import Layout from '@/layout'
-import {sideMenuRoutes} from './sideRoutes'
+import {operateMenu} from './operateRoutes.js'
+import {authMenu} from "@/router/authRoutes.js";
+import {investMenu} from "@/router/investRoutes.js";
+import {cpMenu} from "@/router/cpRoutes.js";
+import {countMenu} from "@/router/countRoutes.js";
 
 /**
  * Note: 路由配置项
@@ -27,98 +31,102 @@ import {sideMenuRoutes} from './sideRoutes'
 
 // 公共路由
 export const constantRoutes = [
-  {
-    path: '/redirect',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: '/redirect/:path(.*)',
-        component: () => import('@/views/redirect/index.vue')
-      }
-    ]
-  },
-  {
-    path: '/login',
-    component: () => import('@/views/login/login.vue'),
-    hidden: true
-  },
-  {
-    path: '/register',
-    component: () => import('@/views/login/register.vue'),
-    hidden: true
-  },
-  {
-    path: '/home',
-    component: () => import('@/views/home/index.vue'),
-    hidden: true
-  },
-  {
-    path: "/:pathMatch(.*)*",
-    component: () => import('@/views/error/404'),
-    hidden: true
-  },
-  {
-    path: '/401',
-    component: () => import('@/views/error/401'),
-    hidden: true
-  },
-  {
-    path: '',
-    redirect: '/login'
-  }
-  // {
-  //   path: '',
-  //   component: Layout,
-  //   redirect: '/platform/game-manage',
-  //   children: [
-  //     {
-  //       path: '/game-manage',
-  //       component: () => import('@/views/platform/gameManage/index2.vue'),
-  //       name: 'gameManage1',
-  //       meta: { title: '游戏管理', activeMenu: '/platform/game', icon: 'star' }
-  //     }
-  //   ]
-  // }
+    {
+        path: '/redirect',
+        component: Layout,
+        hidden: true,
+        children: [
+            {
+                path: '/redirect/:path(.*)',
+                component: () => import('@/views/redirect/index.vue')
+            }
+        ]
+    },
+    {
+        path: '/login',
+        component: () => import('@/views/login/login.vue'),
+        hidden: true
+    },
+    {
+        path: '/register',
+        component: () => import('@/views/login/register.vue'),
+        hidden: true
+    },
+    {
+        path: '/home',
+        component: () => import('@/views/home/index.vue'),
+        hidden: true
+    },
+    {
+        path: "/:pathMatch(.*)*",
+        component: () => import('@/views/error/404'),
+        hidden: true
+    },
+    {
+        path: '/401',
+        component: () => import('@/views/error/401'),
+        hidden: true
+    },
+    {
+        path: '',
+        redirect: '/login'
+    }
+    // {
+    //   path: '',
+    //   component: Layout,
+    //   redirect: '/platform/game-manage',
+    //   children: [
+    //     {
+    //       path: '/game-manage',
+    //       component: () => import('@/views/platform/gameManage/index2.vue'),
+    //       name: 'gameManage1',
+    //       meta: { title: '游戏管理', activeMenu: '/platform/game', icon: 'star' }
+    //     }
+    //   ]
+    // }
 ]
 
 // 动态路由，基于用户权限动态去加载
 export const dynamicRoutes = [
-  // {
-  //   path: '/system/user-auth',
-  //   component: Layout,
-  //   hidden: true,
-  //   permissions: ['system:user:edit'],
-  //   children: [
-  //     {
-  //       path: 'role/:userId(\\d+)',
-  //       component: () => import('@/views/system/user/authRole'),
-  //       name: 'AuthRole',
-  //       meta: { title: '分配角色', activeMenu: '/system/user' }
-  //     },
-  //     {
-  //       path: 'role/:userId(\\d+)',
-  //       component: () => import('@/views/system/user/authRole'),
-  //       name: 'AuthRole',
-  //       meta: { title: '分配角色', activeMenu: '/system/user' }
-  //     }
-  //   ]
-  // },
-  ...sideMenuRoutes
+    // {
+    //   path: '/system/user-auth',
+    //   component: Layout,
+    //   hidden: true,
+    //   permissions: ['system:user:edit'],
+    //   children: [
+    //     {
+    //       path: 'role/:userId(\\d+)',
+    //       component: () => import('@/views/system/user/authRole'),
+    //       name: 'AuthRole',
+    //       meta: { title: '分配角色', activeMenu: '/system/user' }
+    //     },
+    //     {
+    //       path: 'role/:userId(\\d+)',
+    //       component: () => import('@/views/system/user/authRole'),
+    //       name: 'AuthRole',
+    //       meta: { title: '分配角色', activeMenu: '/system/user' }
+    //     }
+    //   ]
+    // },
 ]
 
+export const cpMenuRoute = cpMenu
+export const countMenuRoute = countMenu
+export const operateMenuRoute = operateMenu
+export const authMenuRoute = authMenu
+export const investMenuRoute = investMenu
 
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes: [...constantRoutes, ...dynamicRoutes],
-  scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition
-    } else {
-      return { top: 0 }
-    }
-  },
+    history: createWebHistory(),
+    routes: [...constantRoutes, ...operateMenuRoute, ...authMenuRoute, ...investMenuRoute, ...cpMenuRoute, ...countMenuRoute],
+    scrollBehavior(to, from, savedPosition) {
+        if (savedPosition) {
+            return savedPosition
+        } else {
+            return {top: 0}
+        }
+    },
 });
 
 export default router;

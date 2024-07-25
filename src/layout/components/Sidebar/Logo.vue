@@ -26,7 +26,9 @@ defineProps({
   }
 })
 
-const title = '国内游戏发行' || import.meta.env.VITE_APP_TITLE;
+const title = computed(()=> {
+  return sessionStorage.getItem('systemName') || '国内游戏发行'
+})
 const settingsStore = useSettingsStore();
 const sideTheme = computed(() => settingsStore.sideTheme);
 </script>
