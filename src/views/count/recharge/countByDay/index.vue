@@ -13,7 +13,7 @@
 </template>
 <script setup name="countByDay">
 import dayjs from "dayjs";
-import basicTable from '@/components/BasicTable'
+import basicTable from '@/components/BasicTable/index.vue'
 import { commonParams } from '@/constant/common.js'
 import {getGameSelectList} from '@/api/platform/gameManage.js'
 import {getCountByDayList} from '@/api/recharge/countByDay.js'

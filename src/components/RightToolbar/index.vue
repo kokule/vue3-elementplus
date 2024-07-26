@@ -19,11 +19,14 @@
           <template #dropdown>
             <el-dropdown-menu>
               <el-checkbox class="check-all" :indeterminate="allIndeterminate" :checked="!allIndeterminate" @change="checkboxChange($event, {prop: 'all'})" label="全选" />
-              <template v-for="item in columns" :key="item.prop">
-                <el-dropdown-item>
-                  <el-checkbox v-model="item.visible" @change="checkboxChange($event, item)" :label="item.label" />
-                </el-dropdown-item>
-              </template>
+             <div class="column-check">
+               <template v-for="item in columns" :key="item.prop">
+                 <el-dropdown-item>
+                   <el-checkbox v-model="item.visible" @change="checkboxChange($event, item)" :label="item.label" />
+                 </el-dropdown-item>
+               </template>
+             </div>
+
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -153,5 +156,17 @@ function checkboxChange(visible, item) {
 }
 .check-all {
   padding-left: 17px;
+  position: absolute;
+  top: 0;
+}
+.el-dropdown-menu {
+  position: relative;
+  padding-top: 30px;
+  overflow: hidden;
+  .column-check {
+    overflow-y: auto;
+    max-height: 600px;
+
+  }
 }
 </style>

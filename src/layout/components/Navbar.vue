@@ -14,12 +14,6 @@
         <el-tooltip content="回到首页" effect="dark" placement="bottom">
           <svg-icon class="svg-icon-home hover-effect hover-animation" icon-class="home" @click="toHomePage"/>
         </el-tooltip>
-
-        <!--        <el-tooltip content="文档地址" effect="dark" placement="bottom">-->
-        <!--          <ruo-yi-doc id="ruoyi-doc" class="right-menu-item hover-effect" />-->
-        <!--        </el-tooltip>-->
-
-
         <el-tooltip content="布局大小" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect"/>
         </el-tooltip>

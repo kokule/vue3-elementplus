@@ -13,7 +13,7 @@
 </template>
 <script setup name="countByServer">
 import dayjs from "dayjs";
-import basicTable from '@/components/BasicTable'
+import basicTable from '@/components/BasicTable/index.vue'
 import {getGameSelectList, getGameServerList} from '@/api/platform/gameManage.js'
 import {getCountByServerList} from '@/api/recharge/countByServer.js'
 

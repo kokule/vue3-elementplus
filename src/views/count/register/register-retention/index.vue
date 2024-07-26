@@ -6,15 +6,11 @@
                @resetQuery="resetQuery"
                @handleSearchBtn="handleSearchBtn"
                v-model:searchFormList="searchFormList">
-    <template #gameName="{row}">
-      <span>{{ row.gameName }}</span>
-    </template>
   </basic-table>
 </template>
-<script setup name="comprehensiveRecharge">
+<script setup name="registerRetention">
 import dayjs from "dayjs";
-import {terminal} from '@/constant/select.js'
-import basicTable from '@/components/BasicTable'
+import basicTable from '@/components/BasicTable/index.vue'
 import {getGameSelectList} from '@/api/platform/gameManage.js'
 import {getComprehensiveList, getChannelSelectList} from '@/api/recharge/comprehensive .js'
 
@@ -33,130 +29,162 @@ const options = {
 const tableColumn = ref([
   {
     prop: 'gameName',
-    label: '游戏名称',
-    useSlot: true,
-    width: 150,
+    label: '日期',
+    width: 120,
     fixed: true,
+    sortable: true
   },
   {
     prop: 'devCount',
-    label: '激活数',
-    sortable: true,
-    width: 100
+    label: '注册数',
+    width: 100,
+    sortable: true
   },
   {
     prop: 'registerCount',
-    label: '注册数',
-    sortable: true,
-    width: 100
+    label: '注册成本',
+    width: 100,
+    sortable: true
   },
   {
     prop: 'registerRate',
-    label: '注册率',
-    sortable: true,
-    width: 100
+    label: '次日留存率',
+    width: 120,
+    sortable: true
   },
   {
-    prop: 'roleRate',
-    label: '创角率',
-    sortable: true,
-    width: 100
+    prop: 'registerRate',
+    label: '3日留存率',
+    width: 120,
+    sortable: true
   },
   {
-    prop: 'adMoney',
-    label: '广告费用',
-    sortable: true,
-    width: 100,
-    showTooltip: true
+    prop: 'registerRate',
+    label: '4日留存率',
+    width: 120,
+    sortable: true
   },
   {
-    prop: 'payCount',
-    label: '充值人数',
-    sortable: true,
-    width: 100
+    prop: 'registerRate',
+    label: '5日留存率',
+    width: 120,
+    sortable: true
   },
   {
-    prop: 'paySum',
-    label: '充值次数',
-    sortable: true,
-    width: 100
+    prop: 'registerRate',
+    label: '6日留存率',
+    width: 120,
+    sortable: true
   },
   {
-    prop: 'newPayCount',
-    label: '新增充值人数',
-    sortable: true,
-    width: 130
+    prop: 'registerRate',
+    label: '7日留存率',
+    width: 120,
+    sortable: true
   },
   {
-    prop: 'newAmount',
-    label: '新增充值金额',
-    sortable: true,
-    width: 130
+    prop: 'registerRate',
+    label: '14日留存率',
+    width: 120,
+    sortable: true
   },
   {
-    prop: 'amount',
-    label: '充值金额',
-    sortable: true,
-    width: 100
+    prop: 'registerRate',
+    label: '21日留存率',
+    width: 120,
+    sortable: true
   },
   {
-    prop: 'amountIncome',
-    label: '游戏分成金额',
-    sortable: true,
-    width: 130,
-    showTooltip: true
+    prop: 'registerRate',
+    label: '28日留存率',
+    width: 120,
+    sortable: true
   },
   {
-    prop: 'amountReal',
-    label: '银行实收金额',
-    sortable: true,
-    width: 130,
-    showTooltip: true
+    prop: 'registerRate',
+    label: '1月留存率',
+    width: 120,
+    sortable: true
   },
   {
-    prop: 'arppu',
-    label: 'ARPPU值',
-    sortable: true,
-    width: 110
+    prop: 'registerRate',
+    label: '2月留存率',
+    width: 120,
+    sortable: true
   },
   {
-    prop: 'registerCost',
-    label: '注册成本',
-    sortable: true,
-    width: 100
+    prop: 'registerRate',
+    label: '3月留存率',
+    width: 120,
+    sortable: true
   },
   {
-    prop: 'newPayRate',
-    label: '新增付费率',
-    sortable: true,
-    width: 120
+    prop: 'registerRate',
+    label: '4月留存率',
+    width: 120,
+    sortable: true
   },
   {
-    prop: 'inputRatio',
-    label: '投产比(%)',
-    sortable: true,
-    width: 120
+    prop: 'registerRate',
+    label: '5月留存率',
+    width: 120,
+    sortable: true
+  },
+  {
+    prop: 'registerRate',
+    label: '6月留存率',
+    width: 120,
+    sortable: true
+  },
+  {
+    prop: 'registerRate',
+    label: '7月留存率',
+    width: 120,
+    sortable: true
+  },
+  {
+    prop: 'registerRate',
+    label: '8月留存率',
+    width: 120,
+    sortable: true
+  },
+  {
+    prop: 'registerRate',
+    label: '9月留存率',
+    width: 120,
+    sortable: true
+  },
+  {
+    prop: 'registerRate',
+    label: '10月留存率',
+    width: 120,
+    sortable: true
+  },
+  {
+    prop: 'registerRate',
+    label: '11月留存率',
+    width: 120,
+    sortable: true
+  },
+  {
+    prop: 'registerRate',
+    label: '1年留存率',
+    width: 120,
+    sortable: true
   }
 ])
 const searchFormList = ref([
   {
     key: ['startTime', 'endTime'],
-    label: '充值日期',
+    label: '注册日期',
     type: 'dateRange',
     value: [options.getDataParams.startTime, options.getDataParams.endTime],
     format: 'YYYY-MM-DD'
   },
   {
-    key: 'platforms',
-    label: '终端',
-    type: 'selectMultiple',
-    value: [],
-    options: terminal
-  },
-  {
     key: 'channelTypes',
-    label: '渠道',
-    type: 'selectMultiple',
+    label: '渠道类型',
+    type: 'select',
     value: [],
     options: channelSelectList,
     optionProps: {
@@ -166,38 +194,92 @@ const searchFormList = ref([
     }
   },
   {
+    key: 'channelChildTypes',
+    label: '渠道子类型',
+    type: 'select',
+    value: [],
+    options: channelSelectList,
+  },
+  {
+    key: 'channelChildTypes',
+    label: '渠道',
+    type: 'select',
+    value: [],
+    options: channelSelectList,
+  },
+  {
+    key: 'channelChildTypes',
+    label: '子渠道',
+    type: 'select',
+    value: [],
+    options: channelSelectList,
+  },
+  {
     key: 'gameIds',
     label: '游戏',
-    width: '300px',
+    width: '240px',
     multiple: true,
     type: 'treeSelect',
     value: [],
     options: gameSelectList,
     nodeKey: 'id',
     props: {children: 'childSelect', label: 'name'}
-  }])
+  },
+  {
+    key: 'channelChildTypes',
+    label: '分组类型',
+    type: 'select',
+    value: [],
+    options: channelSelectList,
+  },
+  {
+    key: 'channelChildTypes',
+    label: '终端',
+    type: 'select',
+    value: [],
+    options: channelSelectList,
+  },
+  {
+    key: 'gameIds',
+    label: '投放人',
+    multiple: true,
+    type: 'treeSelect',
+    value: [],
+    options: gameSelectList,
+    nodeKey: 'id',
+    props: {children: 'childSelect', label: 'name'}
+  },
+  {
+    key: 'gameIds',
+    label: '按设备排重',
+    type: 'switch',
+    value: false
+  },
+  {
+    key: 'gameIds',
+    label: '显示留存人数',
+    type: 'switch',
+    value: false
+  }
+])
 const searchBtnList = ref([
   {
-    label: '昨天',
-    type: 'yesterday'
-  },
-  {
-    label: '前天',
-    type: 'beforeYesterday'
-  },
-  {
+    icon: 'clock',
     label: '本周',
     type: 'thisWeek'
   },
   {
+    icon: 'clock',
     label: '上周',
     type: 'lastWeek'
   },
   {
+    icon: 'clock',
     label: '本月',
     type: 'thisMonth'
   },
   {
+    icon: 'clock',
     label: '上月',
     type: 'lastMonth'
   }
@@ -205,7 +287,7 @@ const searchBtnList = ref([
 
 
 onMounted(() => {
-  getSelectList()
+  // getSelectList()
 })
 
 const getSelectList = () => {

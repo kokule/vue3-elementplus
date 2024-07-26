@@ -1,12 +1,9 @@
 
 
-# 平台简介
-
 
 ## 前端运行
-
 # 安装依赖
-npm --registry=https://registry.npmmirror.com
+npm i
 
 # 启动服务
 npm dev

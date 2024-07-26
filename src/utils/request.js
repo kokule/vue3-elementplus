@@ -65,7 +65,8 @@ service.interceptors.request.use(config => {
       }
     }
   }
-  return config
+  // return config
+  return {} // 暂时不发请求
 }, error => {
     console.log(error)
     Promise.reject(error)

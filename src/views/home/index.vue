@@ -141,6 +141,7 @@ const logout = () => {
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 50px;
 
     width: 100%;
     height: 100%;
@@ -163,17 +164,17 @@ const logout = () => {
     background: rgba(10, 4, 4, 0.05);
     overflow: hidden;
     border-radius: 20px;
-    margin-left: 40px;
+    //margin-right: 40px;
     box-shadow: #1c84c6 5px 5px 10px;
   }
 
   .system-box-item:before {
     content: '';
     position: absolute;
-    width: 100px;
+    width: 120px;
     height: 130%;
     z-index: 1;
-    background: linear-gradient(transparent, #00ccff, transparent);
+    background: linear-gradient(#23e3ac, #00ccff);
     animation: animate 10s linear infinite
   }
 
@@ -189,7 +190,7 @@ const logout = () => {
   .system-box-item:after {
     content: '';
     position: absolute;
-    inset: 3px;
+    inset: 4px;
     background: black;
     border-radius: 20px;
     z-index: 5;

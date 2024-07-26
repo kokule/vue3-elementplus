@@ -6,11 +6,12 @@
         <el-form-item
             v-for="formItem in searchFormList"
             :key="formItem.key"
+            label-width="80px"
             :label="formItem.label"
             :prop="formItem.key">
           <template v-if="['select', 'selectMultiple'].includes(formItem.type)">
             <el-select v-model="formItem.value"
-                       style="width: 200px"
+                       style="width: 180px"
                        collapse-tags
                        filterable
                        collapse-tags-tooltip
@@ -33,7 +34,7 @@
                 collapse-tags
                 collapse-tags-tooltip
                 @check="(nodes,keys,halfNodes,halfKeys) => (changeTreeValue(nodes,keys,halfNodes,halfKeys ,formItem.key))"
-                :style="{width : formItem.width || '200px'}"
+                :style="{width : formItem.width || '180px'}"
                 v-model="formItem.value"
                 :multiple="formItem.multiple"
                 :props="formItem.props"
@@ -52,7 +53,7 @@
           </template>
           <template v-else-if="formItem.type === 'textarea'">
             <el-input type="textarea"
-                      style="width: 200px"
+                      style="width: 180px"
                       v-model="formItem.value"
                       @change="changeValue($event, formItem.key)"
                       :placeholder="formItem.placeholder || '请输入'+ formItem.label"/>
@@ -70,7 +71,7 @@
           </template>
           <template v-else-if="formItem.type === 'dateRange'">
             <el-date-picker
-                style="width: 240px"
+                :style="{width : formItem.width || '240px'}"
                 v-model="formItem.value"
                 type="daterange"
                 :format="formItem.format"
@@ -79,6 +80,9 @@
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
             />
+          </template>
+          <template v-else-if="formItem.type === 'switch'">
+            <el-switch v-model="formItem.value"/>
           </template>
           <!--  不传类型默认输入框  -->
           <template v-else>
@@ -230,7 +234,7 @@ const setTableMaxHeight = () => {
 }
 
 const setTableColumn = (type) => {
-  if(type === 'mounted') { // 初始化的时候设置
+  if (type === 'mounted') { // 初始化的时候设置
     selectColumns.value = _cloneDeep(props.tableColumn)
     selectColumns.value.forEach(e => {
       // 默认没有visible字段的情况下,给一个默认值 true
@@ -239,11 +243,11 @@ const setTableColumn = (type) => {
       }
     })
   }
-  const showProps = selectColumns.value.reduce((pre, cur)=> {
-    if(cur.visible) pre.push(cur.prop)
+  const showProps = selectColumns.value.reduce((pre, cur) => {
+    if (cur.visible) pre.push(cur.prop)
     return pre
   }, [])
-  columns.value = selectColumns.value.filter(e=> showProps.includes(e.prop))
+  columns.value = selectColumns.value.filter(e => showProps.includes(e.prop))
   toggleExpandAll()
 }
 
@@ -360,6 +364,10 @@ const toggleExpandAll = () => {
 
   .top-card {
     margin-bottom: 10px;
+  }
+
+  :deep(.el-form-item__label) {
+    white-space: nowrap !important;
   }
 }
 </style>
